@@ -30,9 +30,7 @@ class SportFactory extends Factory
             $start = '-6 months',
             $inter = '+ 180 days',
         );
-        $sport = $this->faker->randomElement($this::$listeSports);
-        $key = array_search($sport, $this::$listeSports);
-        array_splice($this::$listeSports, $key);
+        $sport = $this->faker->unique->randomElement($this::$listeSports);
         $startDate = '2024-07-26';
         $interval = '+17 days';
         return [
