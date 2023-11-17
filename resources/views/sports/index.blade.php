@@ -1,6 +1,8 @@
 <html>
 <head>
     <title>Liste des sports</title>
+    @vite(['resources/css/app.css'])
+    @vite(['resources/js/app.js'])
 </head>
 <body>
 <form>
@@ -23,5 +25,6 @@
 <x-sport titre="Météo du jour" message="Temps dégagé">
     <p>Ces informations ont été obtenues sur le site <a href="https://meteofrance.com/">météo france</a></p>
 </x-sport>
+<img src="{{ Vite::asset('resources/images/I-love-Paris.jpg') }}">
     </body>
     </html>
