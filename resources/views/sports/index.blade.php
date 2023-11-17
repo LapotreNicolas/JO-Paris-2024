@@ -8,7 +8,6 @@
     <button type="submit" value="Rechercher"></button>
 </form>
 <h2>La liste des sports : ({{count($sports)}})</h2>
-
 @if(!empty($sports))
     <ul>
         @foreach($sports as $sport)
@@ -20,7 +19,9 @@
     </ul>
 @else
     <h3>aucun sport</h3>
-    @endif
-
+@endif
+<x-sport titre="Météo du jour" message="Temps dégagé">
+    <p>Ces informations ont été obtenues sur le site <a href="https://meteofrance.com/">météo france</a></p>
+</x-sport>
     </body>
     </html>
