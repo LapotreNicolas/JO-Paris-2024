@@ -19,3 +19,5 @@ Route::get('/', function () {
 });
 
 Route::get('/sports', [SportController::class,'index'])->name('sports.index');
+
+Route::post('/sports/{id}/upload', [SportController::class, 'upload'])->name('sports.upload');
