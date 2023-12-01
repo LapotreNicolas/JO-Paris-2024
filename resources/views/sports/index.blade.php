@@ -11,14 +11,39 @@
 </form>
 <h2>La liste des sports : ({{count($sports)}})</h2>
 @if(!empty($sports))
-    <ul>
+    <h4>Filtrage par nombre d'épreuves</h4>
+    <form action="{{route('sports.index')}}" method="get">
+        <select name="nb">
+            <option value="All" @if($nb == 'All') selected @endif>-- Toutes catégories --</option>
+            @foreach($nb_epreuves as $epreuves)
+                <option value="{{$epreuves}}" @if($nb == $epreuves) selected @endif>{{$epreuves}}</option>
+            @endforeach
+        </select>
+        <input type="submit" value="OK">
+    </form>
+
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Année d'ajout</th>
+            <th>Nombre de disciplines</th>
+            <th>Nombre d'épreuves</th>
+            <th>Date de début</th>
+            <th>Date de fin</th>
+        </tr>
         @foreach($sports as $sport)
-            <li>{{$sport['nom']}} : {{$sport['description']}}, ajouté en : {{$sport['annee_ajout']}},
-                nombre de disciplines : {{$sport['nb_disciplines']}}, nombre d'épreuves : {{$sport['nb_epreuves']}},
-                commence le {{$sport['date_debut']}} et fini le {{$sport['date_fin']}}
-            </li>
+            <tr>
+                <td>{{$sport['nom']}}</td>
+                <td>{{$sport['description']}}</td>
+                <td>{{$sport['annee_ajout']}}</td>
+                <td>{{$sport['nb_disciplines']}}</td>
+                <td>{{$sport['nb_epreuves']}}</td>
+                <td>{{$sport['date_debut']}}</td>
+                <td>{{$sport['date_fin']}}</td>
+            </tr>
         @endforeach
-    </ul>
+    </table>
 @else
     <h3>aucun sport</h3>
 @endif
