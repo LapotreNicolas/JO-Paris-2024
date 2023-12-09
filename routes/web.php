@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::any('/', [SportController::class,'accueil']);
+
+Route::any('/apropos', [SportController::class,'apropos']);
+
+Route::any('/contact', [SportController::class,'contact']);
 
 Route::get('/sports', [SportController::class,'index'])->name('sports.index');
 
