@@ -10,6 +10,18 @@ use Illuminate\Support\Facades\Storage;
 
 class SportController extends Controller
 {
+    public function accueil() {
+        return view('accueil');
+    }
+
+    public function apropos() {
+        return view('apropos');
+    }
+
+    public function contact() {
+        return view('contact');
+    }
+
     public function index(Request $request) {
         $nb = $request->input('nb', null);
         $cookieNb = $request->cookie('nb', null);
