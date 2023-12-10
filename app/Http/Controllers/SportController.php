@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use function Symfony\Component\String\s;
 
 class SportController extends Controller
 {
@@ -23,32 +24,97 @@ class SportController extends Controller
     }
 
     public function index(Request $request) {
-        $annee = $request->input('annee', null);
-        $cookieNb = $request->cookie('nb', null);
-        $sport = $request->input('sport',null);
-        if (isset($sport)) {
-            $sports = Sport::where('nom','like','%'.$sport.'%')->get();
-        } elseif (!isset($annee)) {
-            if (!isset($cookieNb)) {
-                $sports = Sport::all();
-                $annee = 'All';
-                Cookie::expire('annee');
-            } else {
-                $sports = Sport::where('annee_ajout', $cookieNb)->get();
-                $annee = $cookieNb;
-                Cookie::queue('annee', $annee, 10);
-            }
-        } else {
-            if ($annee == 'All') {
-                $sports = Sport::all();
-                Cookie::expire('annee');
-            } else {
-                $sports = Sport::where('annee_ajout', $annee)->get();
-                Cookie::queue('annee', $annee, 10);
-            }
+        $reset = $request->query('reset', null);
+        if(isset($reset)){
+            Cookie::expire('annee');
+            Cookie::expire('nom');
+            Cookie::expire('debut');
+            return redirect()->route('sports.index')
+                ->with('type', 'success')
+                ->with('text', 'Vos cookies ont été réinitialisés');
         }
+
+        $sort = $request->query('sort', 'none');
+        $annee = $request->query('annee', 'All');
+        $cookieAnnee = $request->cookie('annee');
+        $cookieNom = $request->cookie('nom');
+        $cookieDebut = $request->cookie('debut');
+        $nom = $request->input('nom',null);
+
+        $sports = Sport::all();
+        if ($sort === 'asc' || (isset($cookieDebut) && $cookieDebut === 'asc')) {
+            Cookie::queue('debut', 'asc', 10);
+            $sports = $sports->sortBy('nom');
+        } elseif ($sort === 'desc' || (isset($cookieDebut) && $cookieDebut === 'desc')) {
+            Cookie::queue('debut', 'desc', 10);
+            $sports = $sports->sortByDesc('nom');
+        }
+
+        if (isset($nom)) {
+            Cookie::queue('nom', $nom, 10);
+            $sportsNom = Sport::where('nom','like','%'.$nom.'%')->get();
+            $sportsTmp = [];
+            foreach ($sports as $sport) {
+                foreach ($sportsNom as $sportNom) {
+                    if ($sport == $sportNom) {
+                        $sportsTmp[] = $sport;
+                        break;
+                    }
+                }
+            }
+            $sports = $sportsTmp;
+        } elseif (isset($cookieNom)) {
+            $sportsNom = Sport::where('nom','like','%'.$cookieNom.'%')->get();
+            $sportsTmp = [];
+            foreach ($sports as $sport) {
+                foreach ($sportsNom as $sportNom) {
+                    if ($sport == $sportNom) {
+                        $sportsTmp[] = $sport;
+                        break;
+                    }
+                }
+            }
+            $sports = $sportsTmp;
+        }
+
+        if ($annee !== 'All') {
+            Cookie::queue('annee', $annee, 10);
+            $sportsAnnee = Sport::where('annee_ajout', '=', $annee)->get();
+            $sportsTmp = [];
+            foreach ($sports as $sport) {
+                foreach ($sportsAnnee as $sportAnnee) {
+                    if ($sport == $sportAnnee) {
+                        $sportsTmp[] = $sport;
+                        break;
+                    }
+                }
+            }
+            $sports = $sportsTmp;
+        } else if(isset($cookieAnnee) && $cookieAnnee !== 'All'){
+            $sportsAnnee = Sport::where('annee_ajout', '=', $cookieAnnee)->get();
+            $sportsTmp = [];
+            foreach ($sports as $sport) {
+                foreach ($sportsAnnee as $sportAnnee) {
+                    if ($sport == $sportAnnee) {
+                        $sportsTmp[] = $sport;
+                        break;
+                    }
+                }
+            }
+            $sports = $sportsTmp;
+        }
+
         $annees_ajout = Sport::distinct('annee_ajout')->pluck('annee_ajout');
-        return view('sports.index', ['sports' => $sports, 'annee' => $annee, 'annees_ajout' => $annees_ajout, 'cookiesNb' => $cookieNb]);
+        return view('sports.index', [
+            'sports' => $sports,
+            'sort' => $sort,
+            'annee' => $annee,
+            'annees_ajout' => $annees_ajout,
+            'cookieAnnee' => $cookieAnnee,
+            'cookieNom' => $cookieNom,
+            'cookieDebut' => $cookieDebut
+        ]);
+
     }
 
     public function create()

@@ -6,24 +6,41 @@
 </head>
 <body>
     <x-layout>
+        @if(isset($cookieAnnee) && $annee === 'All' || isset($cookieNom) || isset($cookieDebut))
+            <br>
+            <a href="{{route('sports.index')}}?reset=true">Réinitialiser les cookies</a>
+        @endif
+        <br>
         <form action="{{route('sports.index')}}" method="get">
-            <input type="text" placeholder="Choisissez un sport" name="sport">
+            <h4>Nom d'un sport</h4>
+            <input type="text" placeholder="Entrez un nom" value="{{ $cookieNom }}" name="nom">
+            <br>
+            <h4>Filtrage par année d'ajout</h4>
+            <select name="annee">
+                <option value="All" @if($annee == 'All') selected @endif>-- Toutes les années d'ajout --</option>
+                @foreach($annees_ajout as $annee_ajout)
+                    <option value="{{$annee_ajout}}" @if($annee == $annee_ajout || isset($cookieAnnee) && $cookieAnnee == $annee_ajout) selected @endif>{{$annee_ajout}}</option>
+                @endforeach
+            </select>
+            <br>
+            <div>
+                <label>Pas de tri</label>
+                <input type="radio" name="sort" value="none" @if (!isset($cookieDebut)) checked @endif>
+            </div>
+            <div>
+                <label>Tri par nom croissant</label>
+                <input type="radio" name="sort" value="asc" @if (isset($cookieDebut) && $cookieDebut === 'asc') checked @endif>
+            </div>
+            <div>
+                <label>Tri par nom décroissant</label>
+                <input type="radio" name="sort" value="desc" @if (isset($cookieDebut) && $cookieDebut === 'asc') checked @endif>
+            </div>
             <button type="submit">Rechercher</button>
         </form>
+        <br>
         <a href="{{route('sports.create')}}"><button>Ajouter un sport</button></a>
         <h2>La liste des sports : ({{count($sports)}})</h2>
         @if(!empty($sports))
-            <h4>Filtrage par année d'ajout</h4>
-            <form action="{{route('sports.index')}}" method="get">
-                <select name="annee">
-                    <option value="All" @if($annee == 'All') selected @endif>-- Toutes les années d'ajout --</option>
-                    @foreach($annees_ajout as $annee_ajout)
-                        <option value="{{$annee_ajout}}" @if($annee == $annee_ajout) selected @endif>{{$annee_ajout}}</option>
-                    @endforeach
-                </select>
-                <button type="submit">OK</button>
-            </form>
-
             <table>
                 <tr>
                     <th>Nom</th>
