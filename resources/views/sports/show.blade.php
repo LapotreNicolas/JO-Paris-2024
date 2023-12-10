@@ -9,13 +9,14 @@
         <div class="text-center" style="margin-top: 2rem">
             @if($action == 'delete')
                 <h3>Suppression du sport</h3>
+                <hr class="mt-2 mb-2">
             @else
                 <h3>Affichage du sport</h3>
+                <hr class="mt-2 mb-2">
+                <a href="{{ route('sports.edit', ['sport' => $sport]) }}"><button>Modifier le sport</button></a>
+                <a href="{{ route('sports.destroy', ['sport' => $sport, 'action' => 'delete']) }}"><button>Supprimer le sport</button></a>
             @endif
-            <hr class="mt-2 mb-2">
         </div>
-        <a href="{{ route('sports.edit', ['sport' => $sport]) }}"><button>Modifier le sport</button></a>
-        <a href="{{ route('sports.destroy', ['sport' => $sport, 'action' => 'delete']) }}"><button>Supprimer le sport</button></a>
         <h2>{{$sport['nom']}}</h2>
         <h3>{{$sport['description']}}</h3>
         <h3>Ajouté en : {{$sport['annee_ajout']}}</h3>

@@ -8,7 +8,7 @@
     <x-layout>
         <form action="{{route('sports.index')}}" method="get">
             <input type="text" placeholder="Choisissez un sport" name="sport">
-            <input type="submit" value="Rechercher">
+            <button type="submit">Rechercher</button>
         </form>
         <a href="{{route('sports.create')}}"><button>Ajouter un sport</button></a>
         <h2>La liste des sports : ({{count($sports)}})</h2>
@@ -21,7 +21,7 @@
                         <option value="{{$annee_ajout}}" @if($annee == $annee_ajout) selected @endif>{{$annee_ajout}}</option>
                     @endforeach
                 </select>
-                <input type="submit" value="OK">
+                <button type="submit">OK</button>
             </form>
 
             <table>

@@ -126,11 +126,12 @@ class SportController extends Controller
     }
 
     public function destroy(Request $request, $id) {
+        $sport = Sport::find($id);
         if ($request->delete == 'valide') {
-            $tache = Sport::find($id);
-            $tache->delete();
+            $sport->delete();
+            return redirect()->route('sports.index');
         }
-        return redirect()->route('sports.index');
+        return redirect()->route('sports.show', $sport);
     }
 
     public function upload(Request $request, $id) {
