@@ -14,12 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::any('/', [SportController::class,'accueil']);
+Route::any('/', [SportController::class,'accueil'])->name('accueil');
 
-Route::any('/apropos', [SportController::class,'apropos']);
+Route::any('/apropos', [SportController::class,'apropos'])->name('apropos');
 
-Route::any('/contact', [SportController::class,'contact']);
-
-Route::get('/sports', [SportController::class,'index'])->name('sports.index');
+Route::any('/contact', [SportController::class,'contact'])->name('contact');
 
 Route::post('/sports/{id}/upload', [SportController::class, 'upload'])->name('sports.upload');
+
+Route::resource('sports', SportController::class)->only([
+    'index', 'create', 'store', 'show', 'edit', 'update', 'destroy'
+]);

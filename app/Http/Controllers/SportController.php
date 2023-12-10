@@ -23,29 +23,114 @@ class SportController extends Controller
     }
 
     public function index(Request $request) {
-        $nb = $request->input('nb', null);
+        $annee = $request->input('annee', null);
         $cookieNb = $request->cookie('nb', null);
-
-        if (!isset($nb)) {
+        $sport = $request->input('sport',null);
+        if (isset($sport)) {
+            $sports = Sport::where('nom','like','%'.$sport.'%')->get();
+        } elseif (!isset($annee)) {
             if (!isset($cookieNb)) {
                 $sports = Sport::all();
-                $nb = 'All';
-                Cookie::expire('nb');
+                $annee = 'All';
+                Cookie::expire('annee');
             } else {
-                $sports = Sport::where('nb_epreuves', $cookieNb)->get();
-                $nb = $cookieNb;
-                Cookie::queue('nb', $nb, 10);            }
+                $sports = Sport::where('annee_ajout', $cookieNb)->get();
+                $annee = $cookieNb;
+                Cookie::queue('annee', $annee, 10);
+            }
         } else {
-            if ($nb == 'All') {
+            if ($annee == 'All') {
                 $sports = Sport::all();
-                Cookie::expire('nb');
+                Cookie::expire('annee');
             } else {
-                $sports = Sport::where('nb_epreuves', $nb)->get();
-                Cookie::queue('nb', $nb, 10);
+                $sports = Sport::where('annee_ajout', $annee)->get();
+                Cookie::queue('annee', $annee, 10);
             }
         }
-        $nb_epreuves = Sport::distinct('nb_epreuves')->pluck('nb_epreuves');
-        return view('sports.index', ['sports' => $sports, 'nb' => $nb, 'nb_epreuves' => $nb_epreuves, 'cookiesNb' => $cookieNb]);
+        $annees_ajout = Sport::distinct('annee_ajout')->pluck('annee_ajout');
+        return view('sports.index', ['sports' => $sports, 'annee' => $annee, 'annees_ajout' => $annees_ajout, 'cookiesNb' => $cookieNb]);
+    }
+
+    public function create()
+    {
+        return view('sports.create');
+    }
+
+    public function store(Request $request) {
+        $this->validate(
+            $request,
+            [
+                'nom' => 'required',
+                'description' => 'required',
+                'annee_ajout' => 'required',
+                'nb_disciplines' => 'required',
+                'nb_epreuves' => 'required',
+                'date_debut' => 'required',
+                'date_fin' => 'required',
+            ]
+        );
+
+        $sport = new Sport();
+
+        $sport->nom = $request->nom;
+        $sport->description = $request->description;
+        $sport->annee_ajout = $request->annee_ajout;
+        $sport->nb_disciplines = $request->nb_disciplines;
+        $sport->nb_epreuves = $request->nb_epreuves;
+        $sport->date_debut = $request->date_debut;
+        $sport->date_fin = $request->date_fin;
+
+        $sport->save();
+
+        return redirect()->route('sports.show', ['sport' => $sport]);
+    }
+
+    public function show(Request $request, $id) {
+        $action = $request->query('action', 'show');
+        $sport = Sport::find($id);
+
+        return view('sports.show', ['sport' => $sport, 'action' => $action]);
+    }
+
+    public function edit($sport)
+    {
+        $sport = Sport::find($sport);
+        return view('sports.edit', ['sport' => $sport]);
+    }
+
+    public function update(Request $request, $id) {
+        $sport = Sport::find($id);
+
+        $this->validate(
+            $request,
+            [
+                'nom' => 'required',
+                'description' => 'required',
+                'annee_ajout' => 'required',
+                'nb_disciplines' => 'required',
+                'nb_epreuves' => 'required',
+                'date_debut' => 'required',
+                'date_fin' => 'required',
+            ]
+        );
+        $sport->nom = $request->nom;
+        $sport->description = $request->description;
+        $sport->annee_ajout = $request->annee_ajout;
+        $sport->nb_disciplines = $request->nb_disciplines;
+        $sport->nb_epreuves = $request->nb_epreuves;
+        $sport->date_debut = $request->date_debut;
+        $sport->date_fin = $request->date_fin;
+        $sport->save();
+
+        return redirect()->route('sports.show',['sport' => $sport]);
+    }
+
+    public function destroy(Request $request, $id) {
+        if ($request->delete == 'valide') {
+            $tache = Sport::find($id);
+            $tache->delete();
+        }
+        return redirect()->route('sports.index');
     }
 
     public function upload(Request $request, $id) {
