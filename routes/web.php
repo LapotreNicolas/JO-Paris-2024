@@ -22,6 +22,4 @@ Route::any('/contact', [SportController::class,'contact'])->name('contact');
 
 Route::post('/sports/{id}/upload', [SportController::class, 'upload'])->name('sports.upload');
 
-Route::resource('sports', SportController::class)->only([
-    'index', 'create', 'store', 'show', 'edit', 'update', 'destroy'
-]);
+Route::resource('sports', SportController::class);
