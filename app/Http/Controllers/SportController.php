@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use function Symfony\Component\String\s;
 
 class SportController extends Controller
@@ -34,19 +35,26 @@ class SportController extends Controller
                 ->with('text', 'Vos cookies ont été réinitialisés');
         }
 
-        $sort = $request->query('sort', 'none');
-        $annee = $request->query('annee', 'All');
+        $debut = $request->query('debut');
+        $annee = $request->query('annee');
         $cookieAnnee = $request->cookie('annee');
         $cookieNom = $request->cookie('nom');
         $cookieDebut = $request->cookie('debut');
-        $nom = $request->input('nom',null);
+        $nom = $request->input('nom');
 
         $sports = Sport::all();
-        if ($sort === 'asc' || (isset($cookieDebut) && $cookieDebut === 'asc')) {
-            Cookie::queue('debut', 'asc', 10);
+        if (isset($debut)) {
+            Cookie::queue('debut', $debut, 10);
+        }
+        if ($debut === 'none') {
+            // DO NOTHING
+        } elseif ($debut === 'asc') {
             $sports = $sports->sortBy('nom');
-        } elseif ($sort === 'desc' || (isset($cookieDebut) && $cookieDebut === 'desc')) {
-            Cookie::queue('debut', 'desc', 10);
+        } elseif ($debut === 'desc') {
+            $sports = $sports->sortByDesc('nom');
+        } elseif (isset($cookieDebut) && $cookieDebut === 'asc') {
+            $sports = $sports->sortBy('nom');
+        } elseif (isset($cookieDebut) && $cookieDebut === 'desc') {
             $sports = $sports->sortByDesc('nom');
         }
 
@@ -64,7 +72,8 @@ class SportController extends Controller
             }
             $sports = $sportsTmp;
         } elseif (isset($cookieNom)) {
-            $sportsNom = Sport::where('nom','like','%'.$cookieNom.'%')->get();
+            Cookie::queue('nom', "", 10);
+            $sportsNom = Sport::where('nom', 'like', '%' . $cookieNom . '%')->get();
             $sportsTmp = [];
             foreach ($sports as $sport) {
                 foreach ($sportsNom as $sportNom) {
@@ -77,20 +86,22 @@ class SportController extends Controller
             $sports = $sportsTmp;
         }
 
-        if ($annee !== 'All') {
+        if (isset($annee)) {
             Cookie::queue('annee', $annee, 10);
-            $sportsAnnee = Sport::where('annee_ajout', '=', $annee)->get();
-            $sportsTmp = [];
-            foreach ($sports as $sport) {
-                foreach ($sportsAnnee as $sportAnnee) {
-                    if ($sport == $sportAnnee) {
-                        $sportsTmp[] = $sport;
-                        break;
+            if ($annee !== 'All') {
+                $sportsAnnee = Sport::where('annee_ajout', '=', $annee)->get();
+                $sportsTmp = [];
+                foreach ($sports as $sport) {
+                    foreach ($sportsAnnee as $sportAnnee) {
+                        if ($sport == $sportAnnee) {
+                            $sportsTmp[] = $sport;
+                            break;
+                        }
                     }
                 }
+                $sports = $sportsTmp;
             }
-            $sports = $sportsTmp;
-        } else if(isset($cookieAnnee) && $cookieAnnee !== 'All'){
+        } elseif ($annee !== 'All' && isset($cookieAnnee) && $cookieAnnee !== 'All') {
             $sportsAnnee = Sport::where('annee_ajout', '=', $cookieAnnee)->get();
             $sportsTmp = [];
             foreach ($sports as $sport) {
@@ -107,8 +118,9 @@ class SportController extends Controller
         $annees_ajout = Sport::distinct('annee_ajout')->pluck('annee_ajout');
         return view('sports.index', [
             'sports' => $sports,
-            'sort' => $sort,
             'annee' => $annee,
+            'debut' => $debut,
+            'nom' => $nom,
             'annees_ajout' => $annees_ajout,
             'cookieAnnee' => $cookieAnnee,
             'cookieNom' => $cookieNom,
@@ -123,7 +135,7 @@ class SportController extends Controller
     }
 
     public function store(Request $request) {
-        $this->validate(
+        /*$this->validate(
             $request,
             [
                 'nom' => 'required',
@@ -134,7 +146,25 @@ class SportController extends Controller
                 'date_debut' => 'required',
                 'date_fin' => 'required',
             ]
-        );
+        );*/
+
+        $validator = Validator::make($request->all(), [
+            'nom' => 'required',
+            'description' => 'required',
+            'annee_ajout' => 'required',
+            'nb_disciplines' => 'required',
+            'nb_epreuves' => 'required',
+            'date_debut' => 'required',
+            'date_fin' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('sports.create')
+                ->withErrors($validator)
+                ->withInput()
+                ->with('type', 'error')
+                ->with('msg', 'Formulaire incomplet');
+        }
 
         $sport = new Sport();
 
@@ -148,7 +178,9 @@ class SportController extends Controller
 
         $sport->save();
 
-        return redirect()->route('sports.show', ['sport' => $sport]);
+        return redirect()->route('sports.show', $sport)
+            ->with('type', 'primary')
+            ->with('msg', 'Sport ajoutée avec succès');
     }
 
     public function show(Request $request, $id) {
@@ -167,7 +199,7 @@ class SportController extends Controller
     public function update(Request $request, $id) {
         $sport = Sport::find($id);
 
-        $this->validate(
+        /*$this->validate(
             $request,
             [
                 'nom' => 'required',
@@ -178,7 +210,26 @@ class SportController extends Controller
                 'date_debut' => 'required',
                 'date_fin' => 'required',
             ]
-        );
+        );*/
+
+        $validator = Validator::make($request->all(), [
+            'nom' => 'required',
+            'description' => 'required',
+            'annee_ajout' => 'required',
+            'nb_disciplines' => 'required',
+            'nb_epreuves' => 'required',
+            'date_debut' => 'required',
+            'date_fin' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('sports.edit', $sport)
+                ->withErrors($validator)
+                ->withInput()
+                ->with('type', 'error')
+                ->with('msg', 'Formulaire incomplet');
+        }
+
         $sport->nom = $request->nom;
         $sport->description = $request->description;
         $sport->annee_ajout = $request->annee_ajout;
@@ -188,7 +239,9 @@ class SportController extends Controller
         $sport->date_fin = $request->date_fin;
         $sport->save();
 
-        return redirect()->route('sports.show',['sport' => $sport]);
+        return redirect()->route('sports.show',['sport' => $sport])
+            ->with('type', 'primary')
+            ->with('msg', 'Sport modifié avec succès');
     }
 
     public function destroy(Request $request, $id) {
