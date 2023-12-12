@@ -13,6 +13,9 @@
         <x-header></x-header>
     </menu>
     <main>
+        @if(session('msg'))
+            <x-message-info :type="session('type')" :message="session('msg')"></x-message-info>
+        @endif
         {{$slot}}
     </main>
     <footer>
