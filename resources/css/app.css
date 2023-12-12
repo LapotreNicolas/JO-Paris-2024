@@ -77,3 +77,7 @@ a:active {
     background-color: black;
     font-style: italic;
 }
+
+svg {
+    max-width: 5%;
+}
