@@ -6,14 +6,14 @@
 </head>
 <body>
     <x-layout>
-        @if(isset($cookieAnnee) && $annee === 'All' || isset($cookieNom) || isset($cookieDebut))
+        @if(isset($cookieAnnee) || isset($cookieNom) || isset($cookieDebut))
             <br>
             <a href="{{route('sports.index')}}?reset=true">Réinitialiser les cookies</a>
         @endif
         <br>
         <form action="{{route('sports.index')}}" method="get">
             <h4>Nom d'un sport</h4>
-            <input type="text" placeholder="Entrez un nom" value="@if (isset($nom)){{$nom}}@else{{$cookieNom}}@endif" name="nom">
+            <input type="text" placeholder="Entrez un nom" value="@if (isset($nom) || isset($annee)){{$nom}}@else{{$cookieNom}}@endif" name="nom">
             <br>
             <h4>Filtrage par année d'ajout</h4>
             <select name="annee">
@@ -29,11 +29,11 @@
             </div>
             <div>
                 <label>Tri par nom croissant</label>
-                <input type="radio" name="debut" value="asc" @if ($debut == 'asc' || $debut != 'none' && isset($cookieDebut) && $cookieDebut === 'asc') checked @endif>
+                <input type="radio" name="debut" value="asc" @if ($debut == 'asc' || !isset($debut) && isset($cookieDebut) && $cookieDebut === 'asc') checked @endif>
             </div>
             <div>
                 <label>Tri par nom décroissant</label>
-                <input type="radio" name="debut" value="desc" @if ($debut == 'desc' || $debut != 'none' && isset($cookieDebut) && $cookieDebut === 'desc') checked @endif>
+                <input type="radio" name="debut" value="desc" @if ($debut == 'desc' || !isset($debut) && isset($cookieDebut) && $cookieDebut === 'desc') checked @endif>
             </div>
             <button type="submit">Rechercher</button>
         </form>

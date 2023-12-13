@@ -135,19 +135,6 @@ class SportController extends Controller
     }
 
     public function store(Request $request) {
-        /*$this->validate(
-            $request,
-            [
-                'nom' => 'required',
-                'description' => 'required',
-                'annee_ajout' => 'required',
-                'nb_disciplines' => 'required',
-                'nb_epreuves' => 'required',
-                'date_debut' => 'required',
-                'date_fin' => 'required',
-            ]
-        );*/
-
         $validator = Validator::make($request->all(), [
             'nom' => 'required',
             'description' => 'required',
@@ -198,19 +185,6 @@ class SportController extends Controller
 
     public function update(Request $request, $id) {
         $sport = Sport::find($id);
-
-        /*$this->validate(
-            $request,
-            [
-                'nom' => 'required',
-                'description' => 'required',
-                'annee_ajout' => 'required',
-                'nb_disciplines' => 'required',
-                'nb_epreuves' => 'required',
-                'date_debut' => 'required',
-                'date_fin' => 'required',
-            ]
-        );*/
 
         $validator = Validator::make($request->all(), [
             'nom' => 'required',
