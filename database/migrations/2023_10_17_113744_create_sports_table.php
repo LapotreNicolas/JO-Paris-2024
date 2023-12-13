@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('nb_epreuves')->default(1)->nullable(false);
             $table->datetime('date_debut')->nullable(false);
             $table->datetime('date_fin')->nullable(false);
+            $table->string('url_media')->nullable(true);
             $table->timestamps();
         });
     }

@@ -17,6 +17,7 @@ class Sport extends Model
         'nb_epreuves' => 'integer',
         'date_debut' => 'datetime',
         'date_fin' => 'datetime',
+        'url_media' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];

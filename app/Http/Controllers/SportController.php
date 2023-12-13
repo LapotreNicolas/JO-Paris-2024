@@ -261,7 +261,7 @@ class SportController extends Controller
             $msg = "Aucun fichier téléchargé";
             return redirect()->route('sports.show', [$sport->id])
                 ->with('type', 'primary')
-                ->with('msg', 'Smartphone non modifié ('. $msg . ')');
+                ->with('msg', 'Image non ajoutée ('. $msg . ')');
         }
         $nom = 'image';
         $now = time();
@@ -277,6 +277,6 @@ class SportController extends Controller
         //$file->store('docs');
         return redirect()->route('sports.show', [$sport->id])
             ->with('type', 'primary')
-            ->with('msg', 'Tâche modifiée avec succès');
+            ->with('msg', 'Image ajoutée avec succès');
     }
 }

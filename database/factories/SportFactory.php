@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class SportFactory extends Factory
 {
-    protected $listeSports = array("Athlétisme", "Aviron", "Badminton", "Basketball", "Basketball 3×3", "Boxe",
+    public static $listeSports = array("Athlétisme", "Aviron", "Badminton", "Basketball", "Basketball 3×3", "Boxe",
         "Canoë sprint", "Canoë-kayak slalom", "Cyclisme sur piste", "Cyclisme sur route", "BMX freestyle",
         "BMX racing", "Mountain bike (VTT)", "Escrime", "Football", "Golf", "Gymnastique artistique",
         "Gymnastique rythmique", "Trampoline", "Haltérophilie", "Handball", "Hockey", "Judo", "Lutte",
@@ -30,7 +30,7 @@ class SportFactory extends Factory
             $start = '-6 months',
             $inter = '+ 180 days',
         );
-        $sport = $this->faker->unique->randomElement($this->listeSports);
+        $sport = $this->faker->unique->randomElement(self::$listeSports);
         $startDate = '2024-07-26';
         $interval = '+17 days';
         return [
@@ -41,6 +41,7 @@ class SportFactory extends Factory
             'nb_epreuves' => $this->faker->numberBetween(1, 10),
             'date_debut' => $startDate,
             'date_fin' => $this->faker->dateTimeInInterval($startDate, $interval),
+            'url_media' => null,
             'created_at' => $createAt,
             'updated_at' => $this->faker->dateTimeInInterval(
                 $startDate,

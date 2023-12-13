@@ -14,6 +14,6 @@ class SportSeeder extends Seeder
      */
     public function run(): void
     {
-        Sport::factory(20)->create();
+        Sport::factory(count(SportFactory::$listeSports))->create();
     }
 }
