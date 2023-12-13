@@ -31,16 +31,16 @@ class SportController extends Controller
             Cookie::expire('nom');
             Cookie::expire('debut');
             return redirect()->route('sports.index')
-                ->with('type', 'success')
-                ->with('text', 'Vos cookies ont été réinitialisés');
+                ->with('type', 'primary')
+                ->with('msg', 'Vos cookies ont été réinitialisés');
         }
 
         $debut = $request->query('debut');
         $annee = $request->query('annee');
+        $nom = $request->input('nom');
         $cookieAnnee = $request->cookie('annee');
         $cookieNom = $request->cookie('nom');
         $cookieDebut = $request->cookie('debut');
-        $nom = $request->input('nom');
 
         $sports = Sport::all();
         if (isset($debut)) {
