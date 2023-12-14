@@ -16,9 +16,15 @@
             @else
                 <h3>Affichage du sport</h3>
                 <hr class="mt-2 mb-2">
-                <a href="{{ route('sports.edit', ['sport' => $sport]) }}"><button>Modifier le sport</button></a>
-                <a href="{{ route('sports.show', ['sport' => $sport]) }}"><button>Supprimer le sport</button></a>
-                <a href="{{ route('sports.show', ['sport' => $sport, 'action' => 'upload']) }}"><button>Ajouter une image pour le sport</button></a>
+                @can('update',$sport)
+                    <a href="{{ route('sports.edit', ['sport' => $sport]) }}"><button>Modifier le sport</button></a>
+                @endcan
+                @can('delete',$sport)
+                    <a href="{{ route('sports.show', ['sport' => $sport]) }}"><button>Supprimer le sport</button></a>
+                @endcan
+                @can('upload',$sport)
+                    <a href="{{ route('sports.show', ['sport' => $sport, 'action' => 'upload']) }}"><button>Ajouter une image pour le sport</button></a>
+                @endcan
             @endif
         </div>
         <h2>{{$sport['nom']}}</h2>

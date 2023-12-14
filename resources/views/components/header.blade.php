@@ -9,15 +9,14 @@
 <span class="a-droite"></span>
 @guest
     <div>
-        <button><a href="{{route('register')}}">📥 Enregistrement</a></button>
-        <button><a href="{{route('login')}}">😎 Connexion</a></button>
+        <a href="{{route('register')}}"><button>📥 Enregistrement</button></a>
+        <a href="{{route('login')}}"><button>😎 Connexion</button></a>
     </div>
 @endguest
 @auth
     <div>
         {{Auth::user()->name}}
-        <button><a href="#" id="logout">Logout</a>
-        </button>
+        <a href="#" id="logout"><button>Logout</button></a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
             {{ csrf_field() }}
         </form>

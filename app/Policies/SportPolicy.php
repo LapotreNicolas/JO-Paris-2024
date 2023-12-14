@@ -23,6 +23,10 @@ class SportPolicy
         return $user->id === $sport->user_id;
     }
 
+    function upload(User $user, Sport $sport) {
+        return $user->id === $sport->user_id;
+    }
+
     function create(User $user) {
         return true;
     }

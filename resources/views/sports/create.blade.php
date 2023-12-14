@@ -15,7 +15,7 @@
                 </ul>
             </div>
         @endif
-        <form action="{{route('sports.store')}}" method="POST">
+        <form action="{{route('sports.store', ['user_id' => Auth::id()])}}" method="POST">
             {!! csrf_field() !!}
             <div class="text-center" style="margin-top: 2rem">
                 <h3>Ajout d'un sport</h3>

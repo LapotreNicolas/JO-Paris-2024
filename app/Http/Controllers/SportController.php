@@ -162,6 +162,7 @@ class SportController extends Controller
         $sport->nb_epreuves = $request->nb_epreuves;
         $sport->date_debut = $request->date_debut;
         $sport->date_fin = $request->date_fin;
+        $sport->user_id = $request->user_id;
 
         $sport->save();
 
