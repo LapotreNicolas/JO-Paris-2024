@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -33,6 +34,7 @@ class SportFactory extends Factory
         $sport = $this->faker->unique->randomElement(self::$listeSports);
         $startDate = '2024-07-26';
         $interval = '+17 days';
+        $users_id = User::all()->pluck('id');
         return [
             'nom' => $sport,
             'description' => $this->faker->paragraph,
@@ -42,6 +44,7 @@ class SportFactory extends Factory
             'date_debut' => $startDate,
             'date_fin' => $this->faker->dateTimeInInterval($startDate, $interval),
             'url_media' => null,
+            'user_id' => $this->faker->randomElement($users_id),
             'created_at' => $createAt,
             'updated_at' => $this->faker->dateTimeInInterval(
                 $startDate,

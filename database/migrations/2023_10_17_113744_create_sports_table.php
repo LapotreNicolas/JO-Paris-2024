@@ -21,6 +21,8 @@ return new class extends Migration
             $table->datetime('date_debut')->nullable(false);
             $table->datetime('date_fin')->nullable(false);
             $table->string('url_media')->nullable(true);
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

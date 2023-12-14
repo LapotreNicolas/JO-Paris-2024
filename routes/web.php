@@ -22,4 +22,8 @@ Route::any('/contact', [SportController::class,'contact'])->name('contact');
 
 Route::post('/sports/{id}/upload', [SportController::class, 'upload'])->name('sports.upload');
 
-Route::resource('sports', SportController::class);
+Route::resource('sports', SportController::class)->middleware(['auth']);
+
+Route::get('/home', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('home');
