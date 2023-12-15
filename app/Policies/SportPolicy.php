@@ -16,15 +16,15 @@ class SportPolicy
     }
 
     function update(User $user, Sport $sport) {
-        return $user->id === $sport->user_id;
+        return $user->id === $sport->user_id || $user->is_admin;
     }
 
     function delete(User $user, Sport $sport) {
-        return $user->id === $sport->user_id;
+        return $user->id === $sport->user_id || $user->is_admin;
     }
 
     function upload(User $user, Sport $sport) {
-        return $user->id === $sport->user_id;
+        return $user->id === $sport->user_id || $user->is_admin;
     }
 
     function create(User $user) {

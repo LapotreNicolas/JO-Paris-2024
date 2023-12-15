@@ -34,6 +34,7 @@
         <h3>Nombre d'épreuves : {{$sport['nb_epreuves']}}</h3>
         <h3>Débute le : {{$sport['date_debut']->format("d/m/Y")}}</h3>
         <h3>Fini le : {{$sport['date_fin']->format("d/m/Y")}}</h3>
+        <h3>Crée par : {{\App\Models\User::find($sport->user_id)->name}}</h3>
         @if (isset($sport['url_media']))
             <img src="{{Storage::url($sport['url_media'])}}">
         @endif

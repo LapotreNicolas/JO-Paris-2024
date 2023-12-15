@@ -50,6 +50,7 @@
                     <th>Nombre d'épreuves</th>
                     <th>Date de début</th>
                     <th>Date de fin</th>
+                    <th>Créateur</th>
                 </tr>
                 @foreach($sports as $sport)
                     <tr>
@@ -60,6 +61,7 @@
                         <td>{{$sport['nb_epreuves']}}</td>
                         <td>{{$sport['date_debut']->format("d/m/Y")}}</td>
                         <td>{{$sport['date_fin']->format("d/m/Y")}}</td>
+                        <td>{{\App\Models\User::find($sport->user_id)->name}}</td>
                     </tr>
                 @endforeach
             </table>

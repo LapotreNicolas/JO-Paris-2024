@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sport;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
@@ -162,7 +163,7 @@ class SportController extends Controller
         $sport->nb_epreuves = $request->nb_epreuves;
         $sport->date_debut = $request->date_debut;
         $sport->date_fin = $request->date_fin;
-        $sport->user_id = $request->user_id;
+        $sport->user_id = User::find($request->user_id);
 
         $sport->save();
 
