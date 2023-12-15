@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AthleteController;
 use App\Http\Controllers\SportController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,8 @@ Route::any('/contact', [SportController::class,'contact'])->name('contact');
 Route::post('/sports/{id}/upload', [SportController::class, 'upload'])->name('sports.upload');
 
 Route::resource('sports', SportController::class)->middleware(['auth']);
+
+Route::resource('athletes', AthleteController::class)->only('index')->middleware(['auth']);
 
 Route::get('/home', function () {
     return view('dashboard');

@@ -2,6 +2,7 @@
 <a href="{{ route('accueil') }}"><button>🏛 Accueil</button></a>
 @auth
     <a href="{{ route('sports.index') }}"><button>🥇 Sports</button></a>
+    <a href="{{ route('athletes.index') }}"><button> Athletes</button></a>
 @endauth
 <a href="{{ route('apropos') }}"><button>ℹ️ A propos</button></a>
 <a href="{{ route('contact') }}"><button> Contact</button></a>

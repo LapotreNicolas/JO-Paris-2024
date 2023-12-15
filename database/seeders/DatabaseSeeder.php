@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Athlete;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -13,8 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(10)->create();
-
         \App\Models\User::factory()->create([
             'name' => 'Iorka',
             'email' => 'iorka@gmail.com',
@@ -23,6 +22,10 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(4),
             'is_admin' => true,
         ]);
+
+        \App\Models\User::factory(10)->create();
+
+        $this->call(AthleteSeeder::class);
         $this->call(SportSeeder::class);
     }
 }

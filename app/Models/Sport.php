@@ -25,4 +25,10 @@ class Sport extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    function athletes() {
+        return $this->belongsToMany(Athlete::class, 'classement')
+            ->as('classement')
+            ->withPivot('rang', 'performance');
+    }
 }
