@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AthleteController;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\SportController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::any('/', [SportController::class,'accueil'])->name('accueil');
+Route::any('/', [SportController::class,'accueil'])->name('home');
 
 Route::any('/apropos', [SportController::class,'apropos'])->name('apropos');
 
@@ -26,8 +27,11 @@ Route::post('/sports/{id}/upload', [SportController::class, 'upload'])->name('sp
 
 Route::resource('sports', SportController::class)->middleware(['auth']);
 
-Route::resource('athletes', AthleteController::class)->only('index')->middleware(['auth']);
+Route::resource('athletes', AthleteController::class)->only('index', 'show')->middleware(['auth']);
 
-Route::get('/home', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('home');
+Route::get('sports/{id}/classement', [SportController::class, 'classement'])->name('sports.classement')->middleware(['auth']);
+
+Route::get('sports/{id}/or', [SportController::class, 'or'])->name('sports.or')->middleware(['auth']);
+
+Route::get('medailles', [Controller::class, 'medailles'])->name('medailles')->middleware(['auth']);
+
