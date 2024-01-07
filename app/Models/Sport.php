@@ -29,6 +29,7 @@ class Sport extends Model
     function athletes() {
         return $this->belongsToMany(Athlete::class, 'classement')
             ->as('classement')
-            ->withPivot('rang', 'performance');
+            ->withPivot('rang', 'performance')
+            ->orderBy('rang');
     }
 }

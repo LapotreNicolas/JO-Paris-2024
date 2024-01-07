@@ -13,9 +13,10 @@ class Athlete extends Model
 
     protected $fillable = ['nom', 'nationalite', 'age'];
 
-    function taches() {
+    function sports() {
         return $this->belongsToMany(Sport::class, 'classement')
             ->as('classement')
-            ->withPivot('rang', 'performance');
+            ->withPivot('rang', 'performance')
+            ->orderBy('rang');
     }
 }
