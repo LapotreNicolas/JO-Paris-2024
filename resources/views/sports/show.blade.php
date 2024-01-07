@@ -1,11 +1,4 @@
-<html>
-<head>
-    <title>Sport</title>
-    @vite(['resources/css/app.css'])
-    @vite(['resources/js/app.js'])
-</head>
-<body>
-    <x-layout>
+<x-layout titre="Sport">
         <div class="text-center" style="margin-top: 2rem">
             @if($action == 'delete')
                 <h3>Suppression du sport</h3>
@@ -34,7 +27,28 @@
         <h3>Nombre d'épreuves : {{$sport['nb_epreuves']}}</h3>
         <h3>Débute le : {{$sport['date_debut']->format("d/m/Y")}}</h3>
         <h3>Fini le : {{$sport['date_fin']->format("d/m/Y")}}</h3>
-        <h3>Crée par : {{\App\Models\User::find($sport->user_id)->name}}</h3>
+        <h3>Crée par : {{$sport->user->name}}</h3>
+        <h3>Liste des athlètes :</h3>
+        @if(count($sport->athletes) > 0)
+            <table>
+                <tr>
+                    <th>Nom</th>
+                    <th>Nationalité</th>
+                    <th>Rang</th>
+                    <th>Performance</th>
+                </tr>
+                @foreach($sport->athletes as $athlete)
+                    <tr>
+                        <td><a href="{{route('athletes.show', $athlete->id)}}">{{$athlete->nom}}</a></td>
+                        <td>{{$athlete->nationalite}}</td>
+                        <td>{{$athlete->classement->rang}}@switch($athlete->classement->rang) @case(1)🥇@break @case(2)🥈@break @case(3)🥉@break @endswitch</td>
+                        <td>{{$athlete->classement->performance}}</td>
+                    </tr>
+                @endforeach
+            </table>
+        @else
+            <h4>Aucun athlète</h4>
+        @endif
         @if (isset($sport['url_media']))
             <img src="{{Storage::url($sport['url_media'])}}">
         @endif
@@ -58,6 +72,4 @@
                 <input type="submit" value="Télécharger" name="submit">
             </form>
         @endif
-    </x-layout>
-</body>
-</html>
+</x-layout>
