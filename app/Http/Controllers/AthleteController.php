@@ -35,9 +35,10 @@ class AthleteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Athlete $athlete)
+    public function show($id)
     {
-        //
+        $athlete = Athlete::find($id);
+        return view('athletes.show', ['athlete' => $athlete]);
     }
 
     /**
