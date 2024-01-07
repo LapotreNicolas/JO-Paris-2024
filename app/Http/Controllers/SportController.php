@@ -255,4 +255,15 @@ class SportController extends Controller
             ->with('type', 'primary')
             ->with('msg', 'Image ajoutée avec succès');
     }
+
+    public function classement($id) {
+        $sport = Sport::find($id);
+        return view("sports.classement", ['sport' => $sport]);
+    }
+
+    public function or($id) {
+        $sport = Sport::find($id);
+        $athletes = $sport->athletes()->where('rang',1)->get();
+        return view("sports.or", ['sport' => $sport, 'athletes' => $athletes]);
+    }
 }
