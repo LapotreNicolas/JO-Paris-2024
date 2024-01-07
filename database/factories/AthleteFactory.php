@@ -25,7 +25,7 @@ class AthleteFactory extends Factory
         $interval = '+17 days';
         return [
             'nom' => $this->faker->name,
-            'nationalite' => $this->faker->randomElement(['France', 'Allemagne', 'Espagne', 'Italie', 'Anglais', 'Russe']),
+            'nationalite' => $this->faker->randomElement(['Français(e)', 'Allemand(e)', 'Espagnol(e)', 'Italien(ne)', 'Anglais(e)', 'Russe', 'Japonais(e)', 'Coréen(ne)', 'Chinois(e)', 'Américain(e)', 'Canadien(ne)']),
             'age' => $this->faker->numberBetween(18, 60),
             'created_at' => $createAt,
             'updated_at' => $this->faker->dateTimeInInterval(

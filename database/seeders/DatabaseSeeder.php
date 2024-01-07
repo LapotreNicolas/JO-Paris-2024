@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Athlete;
+use App\Models\Sport;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -18,7 +20,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Iorka',
             'email' => 'iorka@gmail.com',
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => bcrypt('password'), // password
             'remember_token' => Str::random(4),
             'is_admin' => true,
         ]);
@@ -27,5 +29,18 @@ class DatabaseSeeder extends Seeder
 
         $this->call(AthleteSeeder::class);
         $this->call(SportSeeder::class);
+
+        for ($i = 1 ; $i < count(Sport::all()) ; $i++) {
+            for ($j = 1 ; $j < count(Athlete::all()) ; $j++) {
+                if (rand(0,10) > 7) {
+                    DB::table("classement")->insert([
+                        "sport_id" => $i,
+                        "athlete_id" => $j,
+                        "rang" => rand(1, 50),
+                        "performance" => Str::random(30)
+                    ]);
+                }
+            }
+        }
     }
 }

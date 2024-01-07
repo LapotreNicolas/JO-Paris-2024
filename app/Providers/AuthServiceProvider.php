@@ -25,8 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     public function boot() {
         $this->registerPolicies();
 
-        Gate::define('delete-tache', function ($user, $tache) {
-            return $user->id === $tache->user_id;
+        Gate::define('delete-sport', function ($user, $sport) {
+            return $user->id === $sport->user_id;
         });
     }
 }
