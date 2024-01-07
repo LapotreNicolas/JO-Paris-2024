@@ -20,7 +20,7 @@ return new class extends Migration
                 ->onDelete('cascade');
             $table->foreign('sport_id')->references('id')->on('sports')
                 ->onDelete('cascade');
-            $table->integer('rang', 50);
+            $table->integer('rang');
             $table->string('performance');
         });
     }
